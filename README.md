@@ -19,3 +19,5 @@ Building the image:
 git submodule update --init --recursive
 docker buildx build . --platform linux/amd64 --build-arg version=4.1.2 --build-arg channel=dev --build-arg commit=0db91a3
 ```
+
+Currently, this will be published to Docker Hub as stefandesu/shokoserver.
