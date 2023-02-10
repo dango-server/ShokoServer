@@ -515,7 +515,7 @@ public static class Utils
                 .Where(pair => pair.Length == 2 && !string.IsNullOrEmpty(pair[1]))
                 .ToDictionary(pair => pair[0], pair => pair[1]);
     }
-    
+
 
     public static long GetCurrentUTCTime()
     {
@@ -733,16 +733,20 @@ public static class Utils
 
     public static string ReplaceInvalidFolderNameCharacters(string folderName)
     {
-        var ret = folderName.Replace(@"*", "\u2605"); // ★ (BLACK STAR)
-        ret = ret.Replace(@"|", "\u00a6"); // ¦ (BROKEN BAR)
-        ret = ret.Replace(@"\", "\u29F9"); // ⧹ (BIG REVERSE SOLIDUS)
-        ret = ret.Replace(@"/", "\u2044"); // ⁄ (FRACTION SLASH)
-        ret = ret.Replace(@":", "\u0589"); // ։ (ARMENIAN FULL STOP)
-        ret = ret.Replace("\"", "\u2033"); // ″ (DOUBLE PRIME)
-        ret = ret.Replace(@">", "\u203a"); // › (SINGLE RIGHT-POINTING ANGLE QUOTATION MARK)
-        ret = ret.Replace(@"<", "\u2039"); // ‹ (SINGLE LEFT-POINTING ANGLE QUOTATION MARK)
-        ret = ret.Replace(@"?", "\uff1f"); // ？ (FULL WIDTH QUESTION MARK)
-        ret = ret.Replace(@"...", "\u2026"); // … (HORIZONTAL ELLIPSIS)
+        var ret = folderName;
+        // Replace all invalid characters with spaces
+        ret = ret.Replace(@"*", " "); // ★ (BLACK STAR)
+        ret = ret.Replace(@"|", " "); // ¦ (BROKEN BAR)
+        ret = ret.Replace(@"\", " "); // ⧹ (BIG REVERSE SOLIDUS)
+        ret = ret.Replace(@"/", " "); // ⁄ (FRACTION SLASH)
+        ret = ret.Replace(@":", " "); // ։ (ARMENIAN FULL STOP)
+        ret = ret.Replace("\"", " "); // ″ (DOUBLE PRIME)
+        ret = ret.Replace(@">", " "); // › (SINGLE RIGHT-POINTING ANGLE QUOTATION MARK)
+        ret = ret.Replace(@"<", " "); // ‹ (SINGLE LEFT-POINTING ANGLE QUOTATION MARK)
+        ret = ret.Replace(@"?", " "); // ？ (FULL WIDTH QUESTION MARK)
+        // ret = ret.Replace(@"...", "\u2026"); // … (HORIZONTAL ELLIPSIS)
+        // Replace multiple whitespace with a single space
+        ret = Regex.Replace(ret, @"\s+", " ");
         if (ret.StartsWith(".", StringComparison.Ordinal))
         {
             ret = "․" + ret.Substring(1, ret.Length - 1);
@@ -883,21 +887,21 @@ public static class Utils
 
     public static string GetMd5Hash(MD5 md5Hash, string input)
     {
-        // Convert the input string to a byte array and compute the hash. 
+        // Convert the input string to a byte array and compute the hash.
         var data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
-        // Create a new Stringbuilder to collect the bytes 
+        // Create a new Stringbuilder to collect the bytes
         // and create a string.
         var sBuilder = new StringBuilder();
 
-        // Loop through each byte of the hashed data  
-        // and format each one as a hexadecimal string. 
+        // Loop through each byte of the hashed data
+        // and format each one as a hexadecimal string.
         for (var i = 0; i < data.Length; i++)
         {
             sBuilder.Append(data[i].ToString("x2"));
         }
 
-        // Return the hexadecimal string. 
+        // Return the hexadecimal string.
         return sBuilder.ToString();
     }
 
@@ -955,7 +959,7 @@ public static class Utils
         return sbBuffer.ToString();
     }
 
-    // Returns the human-readable file size for an arbitrary, 64-bit file size 
+    // Returns the human-readable file size for an arbitrary, 64-bit file size
     // The default format is "0.### XB", e.g. "4.2 KB" or "1.434 GB"
     // http://www.somacon.com/p576.php
     public static string GetBytesReadable(long i)

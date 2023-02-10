@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace Shoko.Plugin.Abstractions
 {
@@ -22,16 +23,20 @@ namespace Shoko.Plugin.Abstractions
 
         public static string ReplaceInvalidPathCharacters(this string path)
         {
-            string ret = path.Replace(@"*", "\u2605"); // ★ (BLACK STAR)
-            ret = ret.Replace(@"|", "\u00a6"); // ¦ (BROKEN BAR)
-            ret = ret.Replace(@"\", "\u29F9"); // ⧹ (BIG REVERSE SOLIDUS)
-            ret = ret.Replace(@"/", "\u2044"); // ⁄ (FRACTION SLASH)
-            ret = ret.Replace(@":", "\u0589"); // ։ (ARMENIAN FULL STOP)
-            ret = ret.Replace("\"", "\u2033"); // ″ (DOUBLE PRIME)
-            ret = ret.Replace(@">", "\u203a"); // › (SINGLE RIGHT-POINTING ANGLE QUOTATION MARK)
-            ret = ret.Replace(@"<", "\u2039"); // ‹ (SINGLE LEFT-POINTING ANGLE QUOTATION MARK)
-            ret = ret.Replace(@"?", "\uff1f"); // ？ (FULL WIDTH QUESTION MARK)
-            ret = ret.Replace(@"...", "\u2026"); // … (HORIZONTAL ELLIPSIS)
+            string ret = path;
+            // Replace all invalid characters with spaces
+            ret = ret.Replace(@"*", " "); // ★ (BLACK STAR)
+            ret = ret.Replace(@"|", " "); // ¦ (BROKEN BAR)
+            ret = ret.Replace(@"\", " "); // ⧹ (BIG REVERSE SOLIDUS)
+            ret = ret.Replace(@"/", " "); // ⁄ (FRACTION SLASH)
+            ret = ret.Replace(@":", " "); // ։ (ARMENIAN FULL STOP)
+            ret = ret.Replace("\"", " "); // ″ (DOUBLE PRIME)
+            ret = ret.Replace(@">", " "); // › (SINGLE RIGHT-POINTING ANGLE QUOTATION MARK)
+            ret = ret.Replace(@"<", " "); // ‹ (SINGLE LEFT-POINTING ANGLE QUOTATION MARK)
+            ret = ret.Replace(@"?", " "); // ？ (FULL WIDTH QUESTION MARK)
+            // ret = ret.Replace(@"...", "\u2026"); // … (HORIZONTAL ELLIPSIS)
+            // Replace multiple whitespace with a single space
+            ret = Regex.Replace(ret, @"\s+", " ");
             if (ret.StartsWith(".", StringComparison.Ordinal)) ret = "․" + ret.Substring(1, ret.Length - 1);
             if (ret.EndsWith(".", StringComparison.Ordinal)) // U+002E
                 ret = ret.Substring(0, ret.Length - 1) + "․"; // U+2024

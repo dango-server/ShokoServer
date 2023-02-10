@@ -9,3 +9,13 @@ http://shokoanime.com/
 
 # Learn More About Shoko Server
 http://shokoanime.com/shoko-server/
+
+# Notes About Fork
+I adjusted the invalid character replacement so it only uses spaces.
+
+Building the image:
+
+```bash
+git submodule update --init --recursive
+docker buildx build . --platform linux/amd64 --build-arg version=4.1.2 --build-arg channel=dev --build-arg commit=0db91a3
+```
